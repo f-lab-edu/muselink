@@ -1,5 +1,6 @@
 package com.muselink.backend.domain.user;
 
+import com.muselink.backend.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public boolean isEmailDuplicated(String email) {
         return userRepository.existsByEmail(email);
@@ -23,12 +25,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean login(String email, String password) {
+    public String login(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
+
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            return user.getPassword().equals(password);
+            if (user.getPassword().equals(password)) {
+
+                return jwtTokenProvider.generateToken(user.getUsername());
+            }
         }
-        return false;
+        throw new RuntimeException("Invalid email or password");
     }
 }

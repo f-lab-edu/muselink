@@ -24,13 +24,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        boolean success = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
-        if (success) {
-            return ResponseEntity.ok("Login Success!");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        try {
+            String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+            return ResponseEntity.ok().body(token);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+
     }
 
 }
