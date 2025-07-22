@@ -22,6 +22,15 @@ public class UserService {
     }
 
     public void saveUser(User user) {
+
+        if (isEmailDuplicated(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+
+        if (isUsernameDuplicated(user.getUsername())) {
+            throw new IllegalArgumentException("Username already in use");
+        }
+
         userRepository.save(user);
     }
 
