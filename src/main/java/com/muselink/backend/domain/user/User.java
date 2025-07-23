@@ -1,5 +1,6 @@
 package com.muselink.backend.domain.user;
 
+import com.muselink.backend.domain.user.dto.UserUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,6 +47,12 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void update(UserUpdateDTO dto) {
+        this.username = dto.getUsername();
+        this.profileImageUrl = dto.getProfileImageUrl();
+        this.bio = dto.getBio();
     }
 
 }

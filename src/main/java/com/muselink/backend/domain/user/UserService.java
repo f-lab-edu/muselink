@@ -1,5 +1,6 @@
 package com.muselink.backend.domain.user;
 
+import com.muselink.backend.domain.user.dto.UserUpdateDTO;
 import com.muselink.backend.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,19 @@ public class UserService {
             User user = userOpt.get();
             if (user.getPassword().equals(password)) {
 
-                return jwtTokenProvider.generateToken(user.getUsername());
+                return jwtTokenProvider.generateToken(user.getEmail());
             }
         }
         throw new RuntimeException("Invalid email or password");
+    }
+
+    public void updateUser(int userId, UserUpdateDTO dto) {
+        User user = userRepository.findById(userId);
+        user.update(dto);
+        userRepository.save(user);
+    }
+
+    public void deleteUser(int userId) {
+        userRepository.deleteById(userId);
     }
 }
