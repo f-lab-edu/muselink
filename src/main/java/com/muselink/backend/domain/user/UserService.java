@@ -23,6 +23,13 @@ public class UserService {
     }
 
     public void saveUser(User user) {
+
+        if (isEmailDuplicated(user.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+        if (isUsernameDuplicated(user.getUsername())) {
+            throw new RuntimeException("Username already in use");
+        }
         userRepository.save(user);
     }
 
