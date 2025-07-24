@@ -31,26 +31,26 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getMyInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<UserResponseDTO> getMyInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return ResponseEntity.ok(new UserResponseDTO(user));
     }
 
     @PutMapping("/me")
-    public ResponseEntity<String> updateMyInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                               @RequestBody UserUpdateDTO updateDTO) {
+    public ResponseEntity<String> updateMyInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UserUpdateDTO updateDTO) {
         userService.updateUser(userDetails.getUser().getUserId(), updateDTO);
         return ResponseEntity.ok("User updated successfully!");
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<String> deleteMyAccount(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> deleteMyAccount(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.deleteUser(userDetails.getUser().getUserId());
         return ResponseEntity.ok("User deleted Successfully!");
     }
-
 }

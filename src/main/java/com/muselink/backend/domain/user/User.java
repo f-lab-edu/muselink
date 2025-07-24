@@ -54,5 +54,4 @@ public class User {
         this.profileImageUrl = dto.getProfileImageUrl();
         this.bio = dto.getBio();
     }
-
 }
