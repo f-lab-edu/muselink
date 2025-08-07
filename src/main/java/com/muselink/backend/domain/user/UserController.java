@@ -1,6 +1,7 @@
 package com.muselink.backend.domain.user;
 
 import com.muselink.backend.domain.user.dto.LoginRequest;
+import com.muselink.backend.domain.user.dto.SignupRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody User user) {
-        userService.saveUser(user);
+    public ResponseEntity<String> signup(@RequestBody SignupRequest signupRequest) {
+        userService.saveUser(signupRequest);
         return ResponseEntity.ok("User created successfully!");
     }
 
