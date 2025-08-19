@@ -1,6 +1,7 @@
 package com.muselink.backend.domain.user;
 
 import com.muselink.backend.domain.common.Auditable;
+import com.muselink.backend.domain.user.dto.UserUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 public class User extends Auditable {
 
     @Id
@@ -34,4 +36,9 @@ public class User extends Auditable {
 
     private LocalDateTime deletedAt;
 
+    public void update(UserUpdateDTO dto) {
+        this.username = dto.getUsername();
+        this.profileImageUrl = dto.getProfileImageUrl();
+        this.bio = dto.getBio();
+    }
 }

@@ -1,11 +1,13 @@
 package com.muselink.backend.domain.user;
 
 import com.muselink.backend.domain.user.dto.SignupRequest;
+import com.muselink.backend.domain.user.dto.UserUpdateDTO;
 import com.muselink.backend.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,14 @@ public class UserService {
     }
 
     public void saveUser(SignupRequest request) {
+
+        if (isEmailDuplicated(request.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+        if (isUsernameDuplicated(request.getUsername())) {
+            throw new RuntimeException("Username already in use");
+        }
+
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = User.builder()
@@ -45,9 +55,21 @@ public class UserService {
             User user = userOpt.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
 
-                return jwtTokenProvider.generateToken(user.getUsername());
+                return jwtTokenProvider.generateToken(user.getEmail());
             }
         }
         throw new RuntimeException("Invalid email or password");
+    }
+
+    public void updateUser(int userId, UserUpdateDTO dto) {
+        User user = userRepository.findById(userId);
+        user.update(dto);
+        userRepository.save(user);
+    }
+
+    public void deleteUser(int userId) {
+        User user = userRepository.findById(userId);
+        user.setDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
     }
 }
