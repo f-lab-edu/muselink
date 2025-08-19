@@ -1,5 +1,7 @@
 package com.muselink.backend.domain.user;
 
+import com.muselink.backend.domain.common.Auditable;
+import com.muselink.backend.domain.user.dto.UserUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Getter
-public class User {
+@Setter
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,21 +34,11 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     private LocalDateTime deletedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    public void update(UserUpdateDTO dto) {
+        this.username = dto.getUsername();
+        this.profileImageUrl = dto.getProfileImageUrl();
+        this.bio = dto.getBio();
     }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
 }
