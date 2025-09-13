@@ -1,4 +1,4 @@
-package com.muselink.backend.domain.post.entity;
+package com.muselink.backend.domain.post;
 
 import com.muselink.backend.domain.common.Auditable;
 import com.muselink.backend.domain.user.User;
